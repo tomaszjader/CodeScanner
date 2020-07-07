@@ -22,10 +22,13 @@ public class SplashActivity extends AppCompatActivity {
                 finally {
                     Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                     startActivity(intent);
+                    finish();
                 }
             }
         };
         thread.start();
+
+
 
     }
 
