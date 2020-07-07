@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">CodeScanner</string>
+    <string name="app_logo">Logo aplikacji</string>
+    <string name="scan_code">Zeskanuj kod</string>
+    <string name="confirm_and_check">Zatwierdź i sprawdź</string>
+    <string name="help">Pomoc</string>
+    <string name="code">Kod</string>
 </resources>
