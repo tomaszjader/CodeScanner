@@ -9,14 +9,15 @@
     tools:context=".HelpActivity">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/helpText"
         android:layout_width="match_parent"
-        android:layout_height="678dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:text="TextView" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/backToMenuButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Button" />
+        android:text="@string/back" />
 </LinearLayout>
