@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -18,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Button button;
     private Button scanCodeButton;
+    private EditText editText;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,7 +48,10 @@ public class MainActivity extends AppCompatActivity {
                 integrator.initiateScan();
             }
         });
-
+        editText=(EditText)this.findViewById(R.id.password);
+        //editText.setText("iasudh");
+        //editText.getText();
+        //Toast.makeText(this, "Scanned: " + editText.getText(), Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -59,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 Log.d("MainActivity", "Scanned");
                 Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                editText.setText(result.getContents());
+                Toast.makeText(this, "Password " + editText.getText(), Toast.LENGTH_LONG).show();
             }
         } else {
             // This is important, otherwise the result will not be passed to the fragment
