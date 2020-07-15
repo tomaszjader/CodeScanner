@@ -30,13 +30,8 @@ public class HelpActivity extends AppCompatActivity {
         this.backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openMenuActivity();
+                finish();
             }
         });
-    }
-
-    private void openMenuActivity() {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
     }
 }
