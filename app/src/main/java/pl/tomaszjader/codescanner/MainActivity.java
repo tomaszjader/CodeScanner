@@ -1,5 +1,6 @@
 package pl.tomaszjader.codescanner;
 
+import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
                 openHelpActivity();
             }
         });
+        final Activity activity = this;
         scanCodeButton = findViewById(R.id.scanCodeButton);
         scanCodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
         StringBuilder idDec = new StringBuilder(Long.toString(getDec(id)));
         while (idDec.length() < 10) idDec.insert(0, "0");
         this.passwordField.setText(idDec.toString());
+        Toast.makeText(this, "Scanned NFC: " + idDec.toString(), Toast.LENGTH_LONG).show();
     }
 
     private long getDec(byte[] bytes) {
