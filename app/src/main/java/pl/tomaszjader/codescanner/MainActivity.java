@@ -1,7 +1,13 @@
 package pl.tomaszjader.codescanner;
 
-import android.app.Activity;
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.nfc.NfcAdapter;
+import android.nfc.tech.NfcA;
+import android.nfc.tech.NfcB;
+import android.nfc.tech.NfcF;
+import android.nfc.tech.NfcV;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,25 +23,22 @@ import com.google.zxing.integration.android.IntentResult;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button button;
+    private Button helpButton;
     private Button scanCodeButton;
-    private EditText editText;
+    private EditText passwordField;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        this.button = (Button) findViewById(R.id.helpButton);
-        this.button.setOnClickListener(new View.OnClickListener() {
+        this.helpButton = (Button) findViewById(R.id.helpButton);
+        this.helpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 openHelpActivity();
             }
         });
-
-               scanCodeButton = (Button) this.findViewById(R.id.scanCodeButton);
-        final Activity activity = this;
+        scanCodeButton = findViewById(R.id.scanCodeButton);
         scanCodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -48,10 +51,7 @@ public class MainActivity extends AppCompatActivity {
                 integrator.initiateScan();
             }
         });
-        editText=(EditText)this.findViewById(R.id.password);
-        //editText.setText("iasudh");
-        //editText.getText();
-        //Toast.makeText(this, "Scanned: " + editText.getText(), Toast.LENGTH_LONG).show();
+        this.passwordField = findViewById(R.id.password);
     }
 
     @Override
@@ -64,8 +64,8 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 Log.d("MainActivity", "Scanned");
                 Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
-                editText.setText(result.getContents());
-                Toast.makeText(this, "Password " + editText.getText(), Toast.LENGTH_LONG).show();
+                passwordField.setText(result.getContents());
+                Toast.makeText(this, "Password " + passwordField.getText(), Toast.LENGTH_LONG).show();
             }
         } else {
             // This is important, otherwise the result will not be passed to the fragment
@@ -77,4 +77,50 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, HelpActivity.class);
         startActivity(intent);
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(NfcAdapter.ACTION_TAG_DISCOVERED);
+        filter.addAction(NfcAdapter.ACTION_NDEF_DISCOVERED);
+        filter.addAction(NfcAdapter.ACTION_TECH_DISCOVERED);
+        NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+        nfcAdapter.enableForegroundDispatch(this, pendingIntent, new IntentFilter[]{filter},
+                new String[][]{new String[]{
+                        NfcA.class.getName(),
+                        NfcB.class.getName(),
+                        NfcF.class.getName(),
+                        NfcV.class.getName()
+                }});
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+        nfcAdapter.disableForegroundDispatch(this);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        byte[] id = intent.getByteArrayExtra(NfcAdapter.EXTRA_ID);
+        StringBuilder idDec = new StringBuilder(Long.toString(getDec(id)));
+        while (idDec.length() < 10) idDec.insert(0, "0");
+        this.passwordField.setText(idDec.toString());
+    }
+
+    private long getDec(byte[] bytes) {
+        long result = 0;
+        long factor = 1;
+        for (int i = 0; i < bytes.length; ++i) {
+            long value = bytes[i] & 0xffl;
+            result += value * factor;
+            factor *= 256l;
+        }
+        return result;
+    }
 }
+
