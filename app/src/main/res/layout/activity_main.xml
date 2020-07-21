@@ -8,14 +8,14 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <ImageView
-        android:id="@+id/appLogo"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:contentDescription="@string/app_logo"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        app:srcCompat="@drawable/logo" />
+<!--    <ImageView-->
+<!--        android:id="@+id/appLogo"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="100dp"-->
+<!--        android:contentDescription="@string/app_logo"-->
+<!--        android:paddingTop="5dp"-->
+<!--        android:paddingBottom="5dp"-->
+<!--        app:srcCompat="@drawable/logo" />-->
 
     <TextView
         android:id="@+id/appName"
