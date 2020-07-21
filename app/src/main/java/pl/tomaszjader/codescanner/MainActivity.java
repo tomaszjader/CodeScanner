@@ -68,7 +68,9 @@ public class MainActivity extends AppCompatActivity {
             String response;
             response = codeChecker.send();
             if (response != null) {
-                // TODO otwórz nową aktywność
+                Intent intent = new Intent(MainActivity.this, ResultActivity.class);
+                intent.putExtra("response", response);
+                startActivity(intent);
             } else {
                 Toast.makeText(context, "The call was not successful", Toast.LENGTH_LONG).show();
             }
@@ -99,7 +101,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(this);
-        nfcAdapter.disableForegroundDispatch(this);
+        if (nfcAdapter != null) {
+            nfcAdapter.disableForegroundDispatch(this);
+        }
     }
 
     @Override
